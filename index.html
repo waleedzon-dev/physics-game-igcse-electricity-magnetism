@@ -3,55 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة الفيزياء - الكهرباء والمغناطيس (IGCSE)</title>
+    <title>⚡ لعبة الفيزياء التفاعلية - الكهرباء والمغناطيس</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- خلفية متحركة -->
+    <div class="animated-background">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
     <div class="container">
+        <!-- رأس الصفحة -->
         <header>
-            <h1>⚡ لعبة الفيزياء التفاعلية</h1>
-            <p>الكهرباء والمغناطيس - منهج IGCSE</p>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-bolt"></i>
+                    <i class="fas fa-magnet"></i>
+                </div>
+                <div class="header-text">
+                    <h1>⚡ لعبة الفيزياء التفاعلية ⚡</h1>
+                    <p>الكهرباء والمغناطيس - منهج IGCSE</p>
+                </div>
+                <div class="header-stats">
+                    <div class="stat">
+                        <i class="fas fa-star"></i>
+                        <span id="scoreDisplay">0</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-trophy"></i>
+                        <span id="streakDisplay">0</span>
+                    </div>
+                </div>
+            </div>
         </header>
 
+        <!-- منطقة اللعبة الرئيسية -->
         <div class="game-area">
-            <!-- عنوان الوحدة -->
-            <div id="unitTitle" class="unit-title"></div>
-
-            <!-- السؤال -->
-            <div id="questionContainer" class="question-container">
-                <h2 id="question"></h2>
+            <!-- شريط الوحدة -->
+            <div id="unitBadge" class="unit-badge">
+                <span id="unitTitle"></span>
             </div>
 
-            <!-- الخيارات -->
-            <div id="optionsContainer" class="options-container"></div>
+            <!-- بطاقة السؤال -->
+            <div id="questionCard" class="question-card">
+                <div class="question-number">
+                    <span id="questionNum"></span>/<span id="totalQuestions"></span>
+                </div>
+                
+                <div class="question-visual">
+                    <canvas id="physicsCanvas" width="400" height="200"></canvas>
+                </div>
 
-            <!-- التصحيح والشرح -->
+                <h2 id="question" class="question-text"></h2>
+            </div>
+
+            <!-- خيارات الإجابة -->
+            <div id="optionsContainer" class="options-grid"></div>
+
+            <!-- ردود الفعل والشرح -->
             <div id="feedbackContainer" class="feedback-container hidden">
-                <div id="feedbackMessage"></div>
-                <div id="explanation" class="explanation"></div>
-                <button id="nextBtn" class="btn btn-next">السؤال التالي →</button>
+                <div id="feedbackCard" class="feedback-card">
+                    <div id="feedbackMessage" class="feedback-message"></div>
+                    <div id="explanation" class="explanation-box"></div>
+                    <div class="button-group">
+                        <button id="nextBtn" class="btn btn-next">
+                            <span>السؤال التالي</span>
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- شريط التقدم -->
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <p id="progressText" class="progress-text"></p>
             </div>
-            <p id="progressText" class="progress-text">السؤال 1 من 10</p>
 
-            <!-- النتيجة النهائية -->
+            <!-- النتائج النهائية -->
             <div id="resultsContainer" class="results-container hidden">
-                <h2>مبروك! 🎉</h2>
-                <p id="finalScore"></p>
-                <button id="restartBtn" class="btn btn-restart">إعادة تشغيل اللعبة</button>
+                <div class="results-card">
+                    <div class="celebration">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h2>مبروك! 🎉</h2>
+                    <div id="finalScore" class="final-score"></div>
+                    
+                    <div class="achievements">
+                        <h3>الإنجازات 🏆</h3>
+                        <div id="achievementsList" class="achievements-list"></div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="restartBtn" class="btn btn-restart">
+                            <i class="fas fa-redo"></i>
+                            <span>لعب مرة أخرى</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- القائمة السفلية -->
         <footer>
-            <p>تم التطوير لمساعدة طلاب الصف التاسع على فهم الكهرباء والمغناطيس</p>
+            <div class="footer-content">
+                <p>🎓 تم التطوير لمساعدة طلاب الصف التاسع</p>
+                <div class="social-links">
+                    <a href="#"><i class="fas fa-share-alt"></i></a>
+                </div>
+            </div>
         </footer>
     </div>
 
+    <!-- تأثيرات صوتية -->
+    <audio id="correctSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj==" type="audio/wav">
+    </audio>
+    <audio id="incorrectSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBg==" type="audio/wav">
+    </audio>
+
     <script src="questions.js"></script>
+    <script src="animations.js"></script>
     <script src="game.js"></script>
 </body>
 </html>

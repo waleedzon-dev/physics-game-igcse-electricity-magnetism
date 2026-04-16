@@ -1,6 +1,14 @@
 let currentQuestionIndex = 0;
 let score = 0;
 let selectedAnswer = null;
+let streak = 0; // سلسلة الإجابات الصحيحة
+let achievements = {
+    perfect: false,
+    speedrun: false,
+    perfect3: false
+};
+
+const startTime = Date.now();
 
 // عناصر DOM
 const questionElement = document.getElementById('question');
@@ -16,84 +24,117 @@ const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const unitTitle = document.getElementById('unitTitle');
 const questionContainer = document.getElementById('questionContainer');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const streakDisplay = document.getElementById('streakDisplay');
+const questionNum = document.getElementById('questionNum');
+const totalQuestions = document.getElementById('totalQuestions');
 
 // بدء اللعبة
 function startGame() {
     currentQuestionIndex = 0;
     score = 0;
     selectedAnswer = null;
+    streak = 0;
+    achievements = {
+        perfect: false,
+        speedrun: false,
+        perfect3: false
+    };
+    
     resultsContainer.classList.add('hidden');
     questionContainer.classList.remove('hidden');
     feedbackContainer.classList.add('hidden');
+    
+    totalQuestions.textContent = questions.length;
+    
     loadQuestion();
 }
 
-// تحميل السؤال الحالي
+// تحميل السؤال
 function loadQuestion() {
     const question = questions[currentQuestionIndex];
     
-    // تحديث عنوان الوحدة
     unitTitle.textContent = question.unit;
-    
-    // تحديث السؤال
     questionElement.textContent = question.question;
+    questionNum.textContent = currentQuestionIndex + 1;
     
-    // تحديث الخيارات
     optionsContainer.innerHTML = '';
     question.options.forEach((option, index) => {
         const optionBtn = document.createElement('button');
         optionBtn.className = 'option';
-        optionBtn.textContent = option;
+        optionBtn.innerHTML = `<span>${option}</span>`;
         optionBtn.addEventListener('click', () => selectOption(index));
         optionsContainer.appendChild(optionBtn);
     });
     
-    // إعادة تعيين
     selectedAnswer = null;
     feedbackContainer.classList.add('hidden');
     
-    // تحديث شريط التقدم
     updateProgress();
+    
+    // رسم الرسومات
+    if(typeof drawPhysicsIllustration === 'function') {
+        drawPhysicsIllustration(currentQuestionIndex);
+    }
 }
 
 // اختيار إجابة
 function selectOption(index) {
     selectedAnswer = index;
     
-    // تحديث الواجهة
     const options = document.querySelectorAll('.option');
     options.forEach((opt, i) => {
         if (i === index) {
             opt.classList.add('selected');
-        } else {
-            opt.classList.remove('selected');
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-check-circle';
+            opt.appendChild(icon);
         }
     });
     
-    // عرض التصحيح الفوري
     showFeedback();
 }
 
-// عرض التصحيح والشرح
+// عرض التصحيح
 function showFeedback() {
     const question = questions[currentQuestionIndex];
     const isCorrect = selectedAnswer === question.correctAnswer;
     
     if (isCorrect) {
         score++;
+        streak++;
+        scoreDisplay.textContent = score;
+        streakDisplay.textContent = streak;
+        
         feedbackMessage.textContent = '✅ إجابة صحيحة!';
-        feedbackMessage.className = 'correct';
+        feedbackMessage.className = 'feedback-message correct';
+        
+        // صوت التصحيح
+        playSound('correctSound');
     } else {
+        streak = 0;
+        streakDisplay.textContent = '0';
+        
         feedbackMessage.textContent = '❌ إجابة خاطئة!';
-        feedbackMessage.className = 'incorrect';
+        feedbackMessage.className = 'feedback-message incorrect';
+        
+        // صوت الخطأ
+        playSound('incorrectSound');
     }
     
-    explanation.textContent = question.explanation;
+    explanation.innerHTML = `<strong>الشرح:</strong><br>${question.explanation}`;
     feedbackContainer.classList.remove('hidden');
     
-    // تعطيل الخيارات
     const options = document.querySelectorAll('.option');
     options.forEach(opt => opt.style.pointerEvents = 'none');
+}
+
+// تشغيل الأصوات
+function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if(sound) {
+        sound.play().catch(e => console.log('Sound play failed:', e));
+    }
 }
 
 // الانتقال للسؤال التالي
@@ -109,15 +150,21 @@ nextBtn.addEventListener('click', () => {
     }
 });
 
-// عرض النتائج النهائية
+// عرض النتائج
 function showResults() {
     questionContainer.classList.add('hidden');
     feedbackContainer.classList.add('hidden');
     resultsContainer.classList.remove('hidden');
     
     const percentage = Math.round((score / questions.length) * 100);
-    let message = '';
+    const timeTaken = Math.round((Date.now() - startTime) / 1000);
     
+    // فحص الإنجازات
+    if(percentage === 100) achievements.perfect = true;
+    if(timeTaken < 60) achievements.speedrun = true;
+    if(streak >= 3) achievements.perfect3 = true;
+    
+    let message = '';
     if (percentage === 100) {
         message = `🌟 ممتاز جداً! لقد حصلت على ${score} من ${questions.length} (${percentage}%)`;
     } else if (percentage >= 80) {
@@ -128,18 +175,67 @@ function showResults() {
         message = `💪 حاول مرة أخرى! لقد حصلت على ${score} من ${questions.length} (${percentage}%)`;
     }
     
-    finalScore.textContent = message;
+    finalScore.innerHTML = `
+        <div>${message}</div>
+        <div style="margin-top: 15px; font-size: 0.9em; opacity: 0.9;">
+            ⏱️ الوقت المستغرق: ${timeTaken} ثانية
+        </div>
+    `;
+    
+    // عرض الإنجازات
+    displayAchievements();
 }
 
-// تحديث شريط التقدم
+// عرض الإنجازات
+function displayAchievements() {
+    const achievementsList = document.getElementById('achievementsList');
+    achievementsList.innerHTML = '';
+    
+    const achievementsData = [
+        {
+            id: 'perfect',
+            icon: '⭐',
+            name: 'مثالي!',
+            description: 'أجب على جميع الأسئلة بشكل صحيح'
+        },
+        {
+            id: 'speedrun',
+            icon: '⚡',
+            name: 'سريع البرق',
+            description: 'أنه اللعبة في أقل من دقيقة'
+        },
+        {
+            id: 'perfect3',
+            icon: '🔥',
+            name: 'نار!',
+            description: 'ثلاث إجابات صحيحة متتالية'
+        }
+    ];
+    
+    achievementsData.forEach(achievement => {
+        const div = document.createElement('div');
+        div.className = 'achievement';
+        if(achievements[achievement.id]) {
+            div.classList.add('unlocked');
+        }
+        div.innerHTML = `
+            <i class="fas fa-trophy"></i>
+            <p><strong>${achievement.icon} ${achievement.name}</strong></p>
+            <p>${achievement.description}</p>
+        `;
+        achievementsList.appendChild(div);
+    });
+}
+
+// تحديث التقدم
 function updateProgress() {
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     progressFill.style.width = progress + '%';
     progressText.textContent = `السؤال ${currentQuestionIndex + 1} من ${questions.length}`;
 }
 
-// إعادة تشغيل اللعبة
+// إعادة التشغيل
 restartBtn.addEventListener('click', startGame);
 
-// بدء اللعبة عند تحميل الصفحة
+// البدء
 document.addEventListener('DOMContentLoaded', startGame);
