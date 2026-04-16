@@ -48,15 +48,13 @@ header h1 {
     display: inline-block;
     margin-bottom: 30px;
     font-weight: bold;
-    font-size: 1.1em;
 }
 
 .question-card {
-    background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
+    background: #f5f7fa;
     padding: 40px;
     border-radius: 15px;
     margin-bottom: 30px;
-    border: 2px solid #e8eef5;
 }
 
 .question-text {
@@ -64,44 +62,40 @@ header h1 {
     font-size: 1.6em;
     line-height: 1.8;
     margin-top: 20px;
-    font-weight: 500;
 }
 
 .options-grid {
     display: grid;
-    grid-template-columns: 1fr;
     gap: 15px;
     margin-bottom: 30px;
 }
 
 .option {
     background: white;
-    border: 2px solid #e8eef5;
-    padding: 25px;
+    border: 2px solid #ddd;
+    padding: 20px;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
     font-size: 1.1em;
     text-align: right;
 }
 
 .option:hover {
     border-color: #667eea;
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
 }
 
 .option.selected {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
     border-color: #667eea;
 }
 
 .feedback-container {
     margin-top: 30px;
-    padding: 30px;
-    border-radius: 15px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .feedback-container.hidden {
@@ -109,80 +103,77 @@ header h1 {
 }
 
 .feedback-message {
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: bold;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
 .feedback-message.correct {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    background: #d4edda;
     color: #155724;
-    border: 2px solid #2ecc71;
+    border: 2px solid #28a745;
 }
 
 .feedback-message.incorrect {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    background: #f8d7da;
     color: #721c24;
-    border: 2px solid #e74c3c;
+    border: 2px solid #f5c6cb;
 }
 
 .explanation-box {
     background: white;
-    border-right: 5px solid #667eea;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
-    line-height: 1.9;
-    color: #2c3e50;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
 }
 
 .btn {
-    padding: 15px 40px;
+    padding: 12px 30px;
     font-size: 1.1em;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-weight: bold;
     width: 100%;
     margin-top: 15px;
+    transition: all 0.3s;
 }
 
 .btn-next {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
 }
 
 .btn-next:hover {
-    transform: translateY(-3px);
+    background: #764ba2;
 }
 
 .btn-restart {
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    background: #28a745;
     color: white;
 }
 
 .progress-bar {
     width: 100%;
-    height: 12px;
-    background: #e8eef5;
+    height: 10px;
+    background: #ddd;
     border-radius: 10px;
+    margin-top: 30px;
     overflow: hidden;
-    margin-top: 40px;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    transition: width 0.5s ease;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s;
 }
 
 .progress-text {
     text-align: center;
     color: #666;
-    font-size: 0.95em;
     margin-top: 10px;
 }
 
@@ -205,51 +196,49 @@ header h1 {
 
 .results-card {
     background: white;
-    padding: 50px 40px;
-    border-radius: 20px;
+    padding: 40px;
+    border-radius: 15px;
     text-align: center;
     max-width: 500px;
 }
 
 .results-card h2 {
     color: #2c3e50;
-    font-size: 2.5em;
+    font-size: 2em;
     margin-bottom: 20px;
 }
 
 .final-score {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
-    padding: 25px;
-    border-radius: 12px;
-    font-size: 1.4em;
-    margin-bottom: 30px;
-    font-weight: bold;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.3em;
+    margin-bottom: 20px;
 }
 
 .achievements {
     background: #f5f7fa;
-    padding: 25px;
-    border-radius: 12px;
-    margin: 30px 0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
 }
 
 .achievements h3 {
-    color: #2c3e50;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .achievements-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
 }
 
 .achievement {
     background: white;
-    padding: 15px;
-    border-radius: 10px;
-    border: 2px solid #e8eef5;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
 }
 
 .achievement.unlocked {
@@ -259,8 +248,8 @@ header h1 {
 
 footer {
     background: #f5f7fa;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
-    border-top: 1px solid #e8eef5;
+    border-top: 1px solid #ddd;
 }
 EOF
